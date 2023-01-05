@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import logo from '../images/smartphone.png'
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { Typography } from "@mui/material";
 import api from "../Api";
 import { repositoryUser } from "../Repositories/user";
+import { Typography } from "@material-ui/core";
 
 export const Login = (props) => {
     const [email, setemail] = useState('');
