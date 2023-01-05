@@ -6,6 +6,7 @@ import Title from './Title';
 
 function preventDefault(event) {
   event.preventDefault();
+  console.log("sss")
 }
 
 const useStyles = makeStyles({
