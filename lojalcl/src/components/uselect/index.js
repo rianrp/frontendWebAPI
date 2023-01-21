@@ -12,11 +12,11 @@ const ULinesTextField = withStyles({
             color: 'inherited',
         },
         '& label.Mui-focused': {
-            color: '#b91119',
+            color: '#414a7b',
             minWidth: 120
         },
         '& .MuiInput-underline:after': {
-            borderBottomColor: '#b91119',
+            borderBottomColor: '#414a7b',
             minWidth: 120
         },
         '& .MuiOutlinedInput-root': {
@@ -29,7 +29,7 @@ const ULinesTextField = withStyles({
                 minWidth: 120
             },
             '&.Mui-focused fieldset': {
-                borderColor: '#b91119',
+                borderColor: '#414a7b',
             },
         }
     }
@@ -58,7 +58,6 @@ export const USelect = (props) => {
                     fullWidth
                     variant="outlined"
                     disabled={props.disabled}
-                    margin="dense"
                     label={props.label}
                     name={props.name}
                     className={props.className}
@@ -75,7 +74,6 @@ export const USelect = (props) => {
                     fullWidth
                     variant="outlined"
                     disabled={props.disabled}
-                    margin={props.margin == "normal" ? "" : "dense"}
                     label={props.label}
                     name={props.name}
                     className={props.className}

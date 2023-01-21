@@ -22,7 +22,6 @@ function App() {
     const user = Cookies.get("user");
     if (user) {
       setAuth(true);
-      console.log("pegou");
     }
   };
 

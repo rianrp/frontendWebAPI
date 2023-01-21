@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 
 export const ProtectRoutes = ({ children }) => {
   const { auth } = useContext(AuthApi);
-  console.log("AUTH", auth);
   if (!Cookies.get("user")) {
     return <Navigate to="/login" />;
   }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,7 +8,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
-  CircularProgress,
   FormControl,
   Grid,
   InputLabel,
@@ -31,10 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ModalAddProducts(props) {
+export default function ModalBuyProducts(props) {
   const theme = useTheme();
   const [image, setImage] = useState();
-  const [valuePrice, setValuePrice] = useState();
+  const [valuePrice, setValuePrice] = useState(props.priceBuy);
+  const [quantity, setQuantity] = useState(props.quantity);
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const categories = [
     {
@@ -62,83 +62,69 @@ export default function ModalAddProducts(props) {
       label: "Outros",
     },
   ];
+
   const classes = useStyles();
 
   const handleChange = (event) => {
-    props.setPrice(event.target.value);
+    setValuePrice(event.target.value);
   };
-
-  const upload = (arquivo) => {
-    const imagemUpload = arquivo.target.files;
-    if (imagemUpload.lenght <= 0) return;
-    const fileReader = new FileReader();
-    fileReader.onloadend = () => {
-      setImage(fileReader.result);
-      props.setImage(fileReader.result);
-    };
-    fileReader.readAsDataURL(imagemUpload[0]);
-  };
-
-  const handleClickImage = () => {};
 
   const handleClose = () => {
-    props.setOpenModal(false);
+    props.setOpenBuy(false);
   };
+
+  useEffect(() => {
+    setValuePrice(props.priceBuy);
+    if (quantity > props.quantity) {
+      setValuePrice(props.priceBuy);
+      setQuantity(props.quantity);
+    }else{
+        setValuePrice((quantity * props.priceBuy).toString())
+    }
+  }, [quantity]);
+
+  useEffect(() => {
+    setValuePrice(props.priceBuy);
+    setQuantity(props.quantity);
+  }, [props.priceBuy]);
 
   return (
     <div>
       <Dialog
         fullScreen={fullScreen}
-        open={props.openModal}
+        open={props.openBuy}
         onClose={handleClose}
-        fullWidth={"md"}
-        maxWidth={"md"}
+        fullWidth={"xs"}
+        maxWidth={"xs"}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"Adicionando um novo produto"}
+          {"Comprando um novo produto"}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={12}>
-            <Grid
-              item
-              xs={7}
-              style={{ paddingBottom: "10px", paddingRight: "10px" }}
-            >
+            <Grid item xs={12} style={{ paddingBottom: "10px" }}>
               <TextField
                 id="outlined-basic"
-                label="Nome do produto"
+                label={"Compra do produto"}
+                disabled
                 value={props.name}
-                onChange={(e) => props.setName(e.target.value)}
                 variant="outlined"
                 fullWidth={true}
               />
             </Grid>
-            <Grid item xs={5} style={{ paddingBottom: "10px" }}>
-              <USelect
-                {...{
-                  itens: categories,
-                  value: props.categoryProducts,
-                  setValue: props.setCategoryProducts,
-                  label: "Categoria ",
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <FormattedInputs {...{ valuePrice, handleChange }} />
-            </Grid>
-            <Grid item xs={4}>
-              <UploadButton {...{ upload }} />
-            </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 id="outlined-basic"
                 label="Quantidade"
-                value={props.quantity}
-                onChange={(e) => props.setQuantity(e.target.value)}
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
                 variant="outlined"
                 fullWidth={true}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <FormattedInputs {...{ valuePrice, handleChange }} />
             </Grid>
           </Grid>
         </DialogContent>
@@ -146,11 +132,8 @@ export default function ModalAddProducts(props) {
           <Button autoFocus onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={props.handleClickSave} disable={props.loading ? true : false}
-            color="primary"
-            autoFocus
-          >
-            {props.loading ? <CircularProgress /> : "Salvar"}
+          <Button onClick={() => props.handleClickSaveBuy(valuePrice, quantity)} color="primary" autoFocus>
+            Vendas
           </Button>
         </DialogActions>
       </Dialog>

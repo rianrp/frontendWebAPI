@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -31,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ModalAddProducts(props) {
+export default function ModalEditProducts(props) {
   const theme = useTheme();
   const [image, setImage] = useState();
-  const [valuePrice, setValuePrice] = useState();
+  const [valuePrice, setValuePrice] = useState(props.priceEdit);
+
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const categories = [
     {
@@ -62,10 +63,12 @@ export default function ModalAddProducts(props) {
       label: "Outros",
     },
   ];
+
   const classes = useStyles();
 
   const handleChange = (event) => {
-    props.setPrice(event.target.value);
+    setValuePrice(event.target.value);
+    props.setPriceEdit(event.target.value);
   };
 
   const upload = (arquivo) => {
@@ -79,17 +82,30 @@ export default function ModalAddProducts(props) {
     fileReader.readAsDataURL(imagemUpload[0]);
   };
 
-  const handleClickImage = () => {};
+  const uploadImagem = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.type = "file";
+    input.onchange = upload;
+    input.accept = "image/png, image/jpeg";
+    input.click();
+    return;
+  };
 
   const handleClose = () => {
-    props.setOpenModal(false);
+    props.setOpenEdit(false);
+    setValuePrice("")
   };
+
+  useEffect(() => {
+    setValuePrice(props.priceEdit);
+  }, [props.priceEdit]);
 
   return (
     <div>
       <Dialog
         fullScreen={fullScreen}
-        open={props.openModal}
+        open={props.openEdit}
         onClose={handleClose}
         fullWidth={"md"}
         maxWidth={"md"}
@@ -128,7 +144,7 @@ export default function ModalAddProducts(props) {
               <FormattedInputs {...{ valuePrice, handleChange }} />
             </Grid>
             <Grid item xs={4}>
-              <UploadButton {...{ upload }} />
+              <UploadButton {...{ upload, uploadImagem }} />
             </Grid>
             <Grid item xs={4}>
               <TextField
@@ -146,7 +162,9 @@ export default function ModalAddProducts(props) {
           <Button autoFocus onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={props.handleClickSave} disable={props.loading ? true : false}
+          <Button
+            onClick={props.handleClickSaveEdit}
+            disable={props.loading ? true : false}
             color="primary"
             autoFocus
           >

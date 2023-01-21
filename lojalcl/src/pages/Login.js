@@ -28,7 +28,6 @@ export const Login = (props) => {
         Cookies.set("user", "loginTrue");
     //   }
     } catch (error) {
-      console.log("ERROR AQUI ____________ ", error);
     }
   };
 

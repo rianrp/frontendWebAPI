@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,19 +23,10 @@ import Chart from '../components/Chart';
 import Deposits from '../components/Deposits';
 import Orders from '../components/Orders';
 import { ProductRepository } from '../Repositories/products';
+import { SellingRepository } from '../Repositories/selling';
+import { MenuDrawer } from '../components/Drawer';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
 
 const drawerWidth = 240;
 
@@ -122,64 +113,34 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [allProducts, setAllProducts] = useState();
+  const [sallers, setSallers] = useState();
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const GetProducts = async () => {
+  const GetSallers = async () => {
     try {
-      const response = await ProductRepository.getAll();
-
+      const response = await SellingRepository.getAll();
+      setSallers(response.data.data)
     } catch (error) {
       
     }
   }
 
+  useEffect(() => {
+    GetSallers();
+  }, [])
+  
+
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-      </Drawer>
+      <MenuDrawer />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
@@ -193,19 +154,16 @@ export default function Dashboard() {
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                <Deposits />
+                <Deposits {...{sallers, setSallers}}/>
               </Paper>
             </Grid>
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <Orders {...{sallers}}/>
               </Paper>
             </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
     </div>

@@ -47,24 +47,24 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
+    <ListSubheader inset>Relatórios salvos</ListSubheader>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Current month" />
+      <ListItemText primary="Mês Atual" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Last quarter" />
+      <ListItemText primary="Último trimestre" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
+      <ListItemText primary="Venda de fim de ano" />
     </ListItem>
   </div>
 );

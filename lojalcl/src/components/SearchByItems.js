@@ -15,6 +15,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -105,10 +106,6 @@ export default function PrimarySearchAppBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleClickOpen = () => {
-    props.setOpenModal(true);
-  };
-
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -186,17 +183,28 @@ export default function PrimarySearchAppBar(props) {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Pesquisar…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              value={props.searchValue}
+              onChange={(e) => props.setSearchValue(e.target.value)}
             />
+            
           </div>
+          <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={props.handleSearch}
+            >
+              <SearchIcon></SearchIcon>
+            </Button>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton color="inherit" onClick={handleClickOpen}>
+            <IconButton color="inherit" onClick={props.handleOpenCreate}>
               <AddToPhotosIcon />
             </IconButton>
             <IconButton
@@ -215,7 +223,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleClickOpen}
+              onClick={props.handleOpenCreate}
               color="inherit"
             >
               <MoreIcon />
